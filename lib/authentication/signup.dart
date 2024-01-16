@@ -1,5 +1,6 @@
+import 'package:employee_management/model/login_request_model.dart';
 import 'package:employee_management/screens/homepage.dart';
-import 'package:employee_management/service/api_service';
+import 'package:employee_management/service/api_service.dart';
 import 'package:flutter/material.dart';
 
 
@@ -27,11 +28,31 @@ class _SignUpScreenState extends State<SignUpScreen> {
     
   }
 
-  void login(String email, String password) {
-    setState(() {
-      _loginFuture = apiService.login(email, password);
-    });
+  void login(String email, String password) async {
+  try {
+    
+    
+    LoginRequestModel loginRequest = LoginRequestModel(email: email,password: password);
+    var result = await apiService.login(loginRequest);
+
+    if (result['success']) {
+      print(result['token']);
+      print('Login successfully');
+      // Navigate to the home page or perform other actions here
+      
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => HomePage(),
+        ),
+      );
+    } else {
+      print('Login failed: ${result['error']}');
+    }
+  } catch (e) {
+    print(e.toString());
   }
+}
 
   @override
   Widget build(BuildContext context) {

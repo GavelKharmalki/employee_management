@@ -1,18 +1,17 @@
 import 'dart:convert';
 
+
+import 'package:employee_management/model/login_request_model.dart';
 import 'package:http/http.dart' as http;
 
 class ApiService {
   static const String baseUrl = 'https://reqres.in/api';
 
-  Future<Map<String, dynamic>> login(String email, String password) async {
+  Future<Map<String, dynamic>> login(LoginRequestModel loginRequest) async {
     try {
       final response = await http.post(
         Uri.parse('$baseUrl/login'),
-        body: {
-          'email': email,
-          'password': password,
-        },
+        body: loginRequest.toJson(),
       );
 
       if (response.statusCode == 200) {
