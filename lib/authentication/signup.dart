@@ -1,7 +1,9 @@
-import 'package:employee_management/model/login_request_model.dart';
-import 'package:employee_management/screens/homepage.dart';
+
 import 'package:employee_management/service/api_service.dart';
 import 'package:flutter/material.dart';
+import 'package:employee_management/screens/homepage.dart';
+
+import '../model/login_request_model.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({Key? key}) : super(key: key);
@@ -17,24 +19,40 @@ class _SignUpScreenState extends State<SignUpScreen> {
   // Instantiate ApiService
   ApiService apiService = ApiService();
 
-  late Future<Map<String, dynamic>>? _loginFuture; // Initialize to null
+  late Future<Map<String, dynamic>>? _loginFuture;
   late String token;
 
   @override
   void initState() {
     super.initState();
-    _loginFuture = null; // Set it to null to avoid showing loading/error initially
+    _loginFuture = null;
     token = "";
   }
 
-  void login(String email, String password) async {
+  Future<void> login(String email, String password) async {
     try {
-      LoginRequestModel loginRequest = LoginRequestModel(email: email, password: password);
-      setState(() {
-        _loginFuture = apiService.login(loginRequest);
-      });
+      LoginRequestModel loginRequest =
+          LoginRequestModel(email: email, password: password);
+      final result = await apiService.login(loginRequest);
+
+      if (result['success']) {
+        print('Login successful');
+        token = result['token'];
+        print(token);
+        
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => HomePage(),
+          ),
+        );
+      } else {
+        print('Login failed: ${result['error']}');
+        // Handle login failure
+      }
     } catch (e) {
       print(e.toString());
+      // Handle exceptions
     }
   }
 
@@ -42,7 +60,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Sign Up Api'),
+        title: const Text('Login Page'),
       ),
       body: SafeArea(
         child: Padding(
@@ -69,7 +87,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
               SizedBox(height: 40,),
               GestureDetector(
                 onTap: () {
-                  login(emailController.text.toString(), passwordController.text.toString());
+                  login(emailController.text.toString(),
+                      passwordController.text.toString());
                 },
                 child: Container(
                   height: 50,
@@ -80,64 +99,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   child: Center(child: Text('Login')),
                 ),
               ),
-              SizedBox(height: 20),
-              FutureBuilder<Map<String, dynamic>>(
-  future: _loginFuture,
-  builder: (context, snapshot) {
-    if (_loginFuture == null) {
-      return Container(); // or any other initial state widget
-    }
-
-    if (snapshot.connectionState == ConnectionState.waiting) {
-      return CircularProgressIndicator();
-    } else if (snapshot.hasError) {
-      // Show an error message using SnackBar
-      WidgetsBinding.instance?.addPostFrameCallback((_) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('An error occurred: ${snapshot.error}'),
-            duration: Duration(seconds: 3),
-          ),
-        );
-      });
-      return Container();
-    } else {
-      if (snapshot.data!['success']) {
-        // Do something if login is successful
-        print('Login successful');
-        // Extract and store the token
-        token = snapshot.data!['token'];
-        print(token);
-        WidgetsBinding.instance?.addPostFrameCallback((_) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text('Login Successful'),
-              duration: Duration(seconds: 3),
-            ),
-          );
-        });
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (context) => HomePage(),
-          ),
-        );
-      } else {
-        // Show an error message using SnackBar
-        WidgetsBinding.instance?.addPostFrameCallback((_) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text('Login failed: ${snapshot.data!['error']}'),
-              duration: Duration(seconds: 3),
-            ),
-          );
-        });
-      }
-      return Container();
-    }
-  },
-),
-
             ],
           ),
         ),
