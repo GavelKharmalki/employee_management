@@ -3,7 +3,6 @@ import 'package:employee_management/screens/homepage.dart';
 import 'package:employee_management/service/api_service.dart';
 import 'package:flutter/material.dart';
 
-
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({Key? key}) : super(key: key);
 
@@ -18,41 +17,26 @@ class _SignUpScreenState extends State<SignUpScreen> {
   // Instantiate ApiService
   ApiService apiService = ApiService();
 
-  late Future<Map<String, dynamic>> _loginFuture;
+  late Future<Map<String, dynamic>>? _loginFuture; // Initialize to null
   late String token;
+
   @override
   void initState() {
     super.initState();
-    _loginFuture = Future.value({'success': false});
+    _loginFuture = null; // Set it to null to avoid showing loading/error initially
     token = "";
-    
   }
 
   void login(String email, String password) async {
-  try {
-    
-    
-    LoginRequestModel loginRequest = LoginRequestModel(email: email,password: password);
-    var result = await apiService.login(loginRequest);
-
-    if (result['success']) {
-      print(result['token']);
-      print('Login successfully');
-      // Navigate to the home page or perform other actions here
-      
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (context) => HomePage(),
-        ),
-      );
-    } else {
-      print('Login failed: ${result['error']}');
+    try {
+      LoginRequestModel loginRequest = LoginRequestModel(email: email, password: password);
+      setState(() {
+        _loginFuture = apiService.login(loginRequest);
+      });
+    } catch (e) {
+      print(e.toString());
     }
-  } catch (e) {
-    print(e.toString());
   }
-}
 
   @override
   Widget build(BuildContext context) {
@@ -98,57 +82,62 @@ class _SignUpScreenState extends State<SignUpScreen> {
               ),
               SizedBox(height: 20),
               FutureBuilder<Map<String, dynamic>>(
-                future: _loginFuture,
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return CircularProgressIndicator();
-                  } else if (snapshot.hasError) {
-                    // Show an error message using SnackBar
-                    WidgetsBinding.instance.addPostFrameCallback((_) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar( 
-                          content: Text('An error occurred: ${snapshot.error}'),
-                          duration: Duration(seconds: 3),
-                        ),
-                      );
-                    });
-                    return Container();
-                  } else {
-                    if (snapshot.data!['success']) {
-                      // Do something if login is successful
-                      print('Login successful');
-                      // Extract and store the token
-                      token = snapshot.data!['token'];
-                      print(token);
-                      WidgetsBinding.instance.addPostFrameCallback((_) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text('Login Succesfull'),
-                            duration: Duration(seconds: 3),
-                          ),
-                        );
-                      });
-                      Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => HomePage(),
-                      ),
-                    );
-                    } else {
-                      // Show an error message using SnackBar
-                      WidgetsBinding.instance.addPostFrameCallback((_) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text('Login failed: ${snapshot.data!['error']}'),
-                            duration: Duration(seconds: 3),
-                          ),
-                        );
-                      });
-                    }
-                    return Container();
-                  }
-                },
-              ),
+  future: _loginFuture,
+  builder: (context, snapshot) {
+    if (_loginFuture == null) {
+      return Container(); // or any other initial state widget
+    }
+
+    if (snapshot.connectionState == ConnectionState.waiting) {
+      return CircularProgressIndicator();
+    } else if (snapshot.hasError) {
+      // Show an error message using SnackBar
+      WidgetsBinding.instance?.addPostFrameCallback((_) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('An error occurred: ${snapshot.error}'),
+            duration: Duration(seconds: 3),
+          ),
+        );
+      });
+      return Container();
+    } else {
+      if (snapshot.data!['success']) {
+        // Do something if login is successful
+        print('Login successful');
+        // Extract and store the token
+        token = snapshot.data!['token'];
+        print(token);
+        WidgetsBinding.instance?.addPostFrameCallback((_) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Login Successful'),
+              duration: Duration(seconds: 3),
+            ),
+          );
+        });
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => HomePage(),
+          ),
+        );
+      } else {
+        // Show an error message using SnackBar
+        WidgetsBinding.instance?.addPostFrameCallback((_) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Login failed: ${snapshot.data!['error']}'),
+              duration: Duration(seconds: 3),
+            ),
+          );
+        });
+      }
+      return Container();
+    }
+  },
+),
+
             ],
           ),
         ),
