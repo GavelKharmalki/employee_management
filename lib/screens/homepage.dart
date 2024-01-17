@@ -1,6 +1,6 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 
 
@@ -61,25 +61,56 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Current Time App'),
-      ),
-      body: Center(
+      body: SafeArea(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Text(
+            Container(
+              width: MediaQuery.of(context).size.width,
+              height: 100.h,
+              decoration: BoxDecoration(
+                color: Colors.black,
+                borderRadius: BorderRadiusDirectional.only(topStart: Radius.circular(20.w),topEnd: Radius.circular(20.w))
+              ),
+              child:  Padding(
+                padding: const EdgeInsets.all(15.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Icon(Icons.star,color: Colors.white,size: 30.sp),
+                        Icon(Icons.person,color: Colors.white,size: 30.sp)
+                      ],
+                    ),
+                    Text("Morning",style: TextStyle(color: Colors.white,fontSize: 24.sp,fontWeight: FontWeight.bold),),
+                    SizedBox(
+                      height: 5.h,
+                    ),
+                    Text("Let's be productive today",style: TextStyle(color: Colors.white,fontSize: 14.sp,fontWeight: FontWeight.normal),)
+                  ],
+                ),
+              ),
+            ),
+            Center(
+              child: Column(
+                children: [
+                  Text(
               _currentTime,
               style: TextStyle(fontSize: 40, color: Colors.black),
-            ),
-            SizedBox(height: 20),
-            ElevatedButton(
+                        ),
+                        const SizedBox(height: 20),
+                        ElevatedButton(
               onPressed: () {
                 _toggleTimer();
               },
               child: Text(startTime == null ? 'Start Timer' : 'Stop Timer'),
-            ),
-            Text('Total Time: ${_calculateTotalTime()}')
+                        ),
+                        Text('Total Time: ${_calculateTotalTime()}')
+                ],
+              ),
+            )   
           ],
         ),
       ),
