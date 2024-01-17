@@ -13,7 +13,7 @@ class _MyHomePageState extends State<MyHomePage> {
   String _currentTime = '';
   DateTime? startTime;
   DateTime? stopTime;
-
+  String? result;
   @override
   void initState() {
     super.initState();
@@ -40,7 +40,9 @@ class _MyHomePageState extends State<MyHomePage> {
         
         if (startTime != null) {
           print('Total Time: ${_calculateTotalTime()}');
+          var result = _calculateTotalTime();
         }
+        result = _calculateTotalTime();
         // Reset start time
         startTime = null;
       }
@@ -55,7 +57,7 @@ class _MyHomePageState extends State<MyHomePage> {
       int seconds = duration.inSeconds.remainder(60);
       return '$hours:${minutes.toString().padLeft(2, '0')}:${seconds.toString().padLeft(2, '0')}';
     }
-    return 'N/A';
+    return '';
   }
 
   @override
@@ -107,7 +109,11 @@ class _MyHomePageState extends State<MyHomePage> {
               },
               child: Text(startTime == null ? 'Start Timer' : 'Stop Timer'),
                         ),
-                        Text('Total Time: ${_calculateTotalTime()}')
+                
+                //Text(result.toString(),style: TextStyle(fontSize: 40, color: Colors.black),),
+                   
+     Text(result!=null?result.toString():'',style: TextStyle(fontSize: 40, color: Colors.black),)
+          
                 ],
               ),
             )   
