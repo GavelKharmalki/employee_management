@@ -1,5 +1,6 @@
 
 import 'package:employee_management/authentication/signup.dart';
+import 'package:employee_management/screens/homepage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -30,7 +31,7 @@ class MyApp extends StatelessWidget {
           home: child,
         );
       },
-      child: const SignUpScreen()
+      child:  MyHomePage()
     );
   }
 }
