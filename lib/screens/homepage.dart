@@ -16,7 +16,7 @@ class _HomePageState extends State<HomePage> {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Center(
+          const Center(
           child: Text("HomePage",style: TextStyle(color: Colors.black),),
         ),
         SizedBox(
@@ -26,16 +26,16 @@ class _HomePageState extends State<HomePage> {
           onTap: (){
             Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => SignUpScreen()),
+          MaterialPageRoute(builder: (context) => const SignUpScreen()),
         );
           },
           child: Container(
-              padding: EdgeInsets.all(15),
+              padding: const EdgeInsets.all(15),
               decoration: BoxDecoration(
               color: Colors.blue,
               borderRadius: BorderRadius.circular(10),
           ),
-          child: Text(
+          child: const Text(
           'BACK',
           style: TextStyle(
           color: Colors.white,
