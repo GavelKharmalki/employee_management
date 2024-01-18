@@ -92,12 +92,46 @@ Widget overTimeButton(BuildContext context) {
   return Padding(
     padding:  EdgeInsets.only(left: 8.w),
     child: Container(
-      width: MediaQuery.sizeOf(context).width,
+      width: 310.w,
       height: 60.h,
       decoration: BoxDecoration(
         color: Colors.white,
     
       ),
+      child: Row(
+                      children: [
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text("Overtime",style: GoogleFonts.lexend(color: Colors.black,fontSize: 14.sp,fontWeight: FontWeight.normal ),overflow: TextOverflow.ellipsis,),
+                                SizedBox(
+                                  height: 5.h,
+                                ),
+                                Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10.w),
+                                    color: Colors.orangeAccent,
+                                  ),
+                                  child: 
+                                     Padding(
+                                       padding:  EdgeInsets.all(4.w),
+                                       child: Text("Late: 10 minutes",style: GoogleFonts.lexend(color: Colors.white,fontSize: 10.sp,fontWeight: FontWeight.bold )),
+                                     ),
+                                  ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Icon(Icons.punch_clock_rounded,color: Colors.deepPurple,),
+                        ), 
+                      ],
+                    ),
     ),
   );
 }

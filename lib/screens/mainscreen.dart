@@ -223,6 +223,9 @@ class _MainScreenState extends State<MainScreen> {
                               timeButtons("Check In","Last 10 minutes",Icons.login_rounded),
                             ],
                           ),
+                          SizedBox(
+                            height: 5.h,
+                          ),
                           Row(
                             children: [
                               overTimeButton(context),
