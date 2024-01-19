@@ -1,9 +1,11 @@
 
 import 'dart:developer';
 
+import 'package:employee_management/screens/mainscreen.dart';
 import 'package:employee_management/service/api_service.dart';
 import 'package:flutter/material.dart';
 import 'package:employee_management/screens/homepage.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../model/login_request_model.dart';
 
@@ -19,7 +21,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   TextEditingController passwordController = TextEditingController();
 
   bool isLoading = false;
-
+  bool obscurePassword = true;
   // Instantiate ApiService
   ApiService apiService = ApiService();
   late String token;
@@ -55,7 +57,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-            builder: (context) =>  MyHomePage(),
+            builder: (context) =>  MainScreen(
+              userId: email,
+              token: token,
+            ),
           ),
         );
         }
@@ -85,7 +90,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Login Page'),
+        title: const Text('Login',style: TextStyle(color: Colors.deepPurple),),
       ),
       body: isLoading? 
       const Center(
@@ -93,25 +98,59 @@ class _SignUpScreenState extends State<SignUpScreen> {
       ):
       SafeArea(
         child: Padding(
-          padding: const EdgeInsets.all(20.0),
+          padding: const EdgeInsets.all(10.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
+              Image.asset(
+                'assets/images/login.png', // Replace with your actual image asset path
+                
+              ),
               TextFormField(
                 style: const TextStyle(color: Colors.black),
                 controller: emailController,
-                decoration: const InputDecoration(
+                decoration:  InputDecoration(
                   hintText: 'Email',
+                  enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(15.w)),
+                  borderSide: BorderSide(color: Colors.deepPurple), // Set your desired border color here
+                ),
+                focusedBorder: OutlineInputBorder(
+      borderRadius: BorderRadius.all(Radius.circular(15.w)),
+      borderSide: BorderSide(color: Colors.deepPurple), // Border color when focused
+    ),
                 ),
               ),
               const SizedBox(height: 20,),
-              TextFormField(
+              TextFormField( 
+                
+                obscureText: obscurePassword,
                 style: const TextStyle(color: Colors.black),
                 controller: passwordController,
-                decoration: const InputDecoration(
+                decoration:  InputDecoration(
                   hintText: 'Password',
+                  enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(15.w)),
+                  borderSide: BorderSide(color: Colors.deepPurple), // Set your desired border color here
                 ),
+                  focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(15.w)),
+                  borderSide: BorderSide(color: Colors.deepPurple), // Border color when focused
+                ),
+                suffixIcon: GestureDetector(
+            onTap: () {
+              setState(() {
+                obscurePassword = !obscurePassword; // Toggle password visibility
+              });
+            },
+            child: Icon(
+              obscurePassword ? Icons.visibility : Icons.visibility_off,
+              color: Colors.grey,
+            ),
+          ),
+                ),
+                
               ),
               const SizedBox(height: 40,),
               GestureDetector(
@@ -120,12 +159,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       passwordController.text.toString());
                 },
                 child: Container(
-                  height: 50,
+                  height: 50.h,
                   decoration: BoxDecoration(
-                    color: Colors.green,
+                    color: Colors.deepPurple,
                     borderRadius: BorderRadius.circular(10),
                   ),
-                  child: const Center(child: Text('Login')),
+                  child: const Center(child: Text('Login',style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold),)),
                 ),
               ),
             ],

@@ -1,11 +1,30 @@
+import 'package:dotted_line/dotted_line.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+ Widget verticalLineWithIcons() {
+  return DottedLine(
+  direction: Axis.horizontal,
+  alignment: WrapAlignment.center,
+  lineLength: double.infinity,
+  lineThickness: 1.0,
+  dashLength: 4.0,
+  dashColor: Colors.black,
+  dashGradient: [Colors.red, Colors.blue],
+  dashRadius: 0.0,
+  dashGapLength: 4.0,
+  dashGapColor: Colors.transparent,
+  dashGapGradient: [Colors.red, Colors.blue],
+  dashGapRadius: 0.0,
+);
+
+}
+
 Widget timeBoxes(String title, String subTitle,IconData iconData) {
   return Container(
     padding: EdgeInsets.all(8.w),
-    width: 155.w,
+    width: 120.w,
     height: 60.h,
     decoration: BoxDecoration(
       borderRadius: BorderRadius.circular(10.w),
@@ -13,8 +32,8 @@ Widget timeBoxes(String title, String subTitle,IconData iconData) {
     ),
     child: Row(
       children: [
-        Icon(iconData, color: Colors.green),
-        SizedBox(width: 4.w),
+        // Icon(iconData, color: Colors.green),
+        // SizedBox(width: 4.w),
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -35,9 +54,10 @@ Widget timeBoxes(String title, String subTitle,IconData iconData) {
                 subTitle,
                 style: GoogleFonts.lexend(
                   color: Colors.grey,
-                  fontSize: 14.sp,
+                  fontSize: 10.sp,
                   fontWeight: FontWeight.normal,
                 ),
+                
                 overflow: TextOverflow.ellipsis,
               ),
             ],
@@ -56,7 +76,17 @@ Widget timeButtons(String buttonTitle, String buttonSubTitle,IconData buttonIcon
                    decoration: BoxDecoration(
                    borderRadius: BorderRadius.circular(10.w),
                    color: Colors.white,
+                   boxShadow:  [
+                                    BoxShadow(
+                                      color: Colors.grey.shade200,
+                                      //color: Colors.black,
+                                      blurRadius: 5,
+                                      spreadRadius: 0,
+                                      offset: Offset(0,0)
+                                    )
+                                  ]
                   ),
+                  
                     child: Row(
                       children: [
                         Expanded(
@@ -71,6 +101,7 @@ Widget timeButtons(String buttonTitle, String buttonSubTitle,IconData buttonIcon
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(10.w),
                                   color: Colors.orangeAccent,
+                                  
                                 ),
                                 child: 
                                    Padding(
@@ -85,18 +116,80 @@ Widget timeButtons(String buttonTitle, String buttonSubTitle,IconData buttonIcon
                         Icon(buttonIconData,color: Colors.deepPurple,), 
                       ],
                     ),
-                          );
+              );
 }
 
+Widget timeButtons2(String buttonTitle, String buttonSubTitle,IconData buttonIconData) {
+  return Container(
+    padding: EdgeInsets.all(8.w),
+     width: 155.w,
+    height: 60.h,
+                   decoration: BoxDecoration(
+                   borderRadius: BorderRadius.circular(10.w),
+                   color: Colors.white,
+                   boxShadow:  [
+                                    BoxShadow(
+                                      color: Colors.grey.shade200,
+                                      //color: Colors.black,
+                                      blurRadius: 5,
+                                      spreadRadius: 0,
+                                      offset: Offset(0,0)
+                                    )
+                                  ]
+                  ),
+                  
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Icon(buttonIconData,color: Colors.deepPurple,), 
+                        
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(buttonTitle,style: GoogleFonts.lexend(color: Colors.black,fontSize: 14.sp,fontWeight: FontWeight.normal ),overflow: TextOverflow.ellipsis,),
+                              SizedBox(
+                                height: 5.h,
+                              ),
+                              Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10.w),
+                                  color: Colors.white,
+                                  
+                                ),
+                                child: 
+                                   Padding(
+                                     padding:  EdgeInsets.all(4.w),
+                                     child: Text(buttonSubTitle,style: GoogleFonts.lexend(color: Colors.grey.shade300,fontSize: 10.sp,fontWeight: FontWeight.bold )),
+                                   ),
+                                ),
+                            ],
+                          ),
+                        ),
+                        
+                        
+                      ],
+                    ),
+              );
+}
 Widget overTimeButton(BuildContext context) {
   return Padding(
-    padding:  EdgeInsets.only(left: 8.w),
+    padding:  EdgeInsets.only(left: 8.w,right: 10.w),
     child: Container(
       width: 310.w,
       height: 60.h,
       decoration: BoxDecoration(
         color: Colors.white,
-    
+        borderRadius: BorderRadius.circular(15.w),
+        boxShadow: [
+          BoxShadow(
+                                      color: Colors.grey.shade200,
+                                      //color: Colors.black,
+                                      blurRadius: 5,
+                                      spreadRadius: 0,
+                                      offset: Offset(0,0)
+                                    )
+        ]
       ),
       child: Row(
                       children: [
@@ -113,12 +206,12 @@ Widget overTimeButton(BuildContext context) {
                                 Container(
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(10.w),
-                                    color: Colors.orangeAccent,
+                                    color: Colors.white,
                                   ),
                                   child: 
                                      Padding(
                                        padding:  EdgeInsets.all(4.w),
-                                       child: Text("Late: 10 minutes",style: GoogleFonts.lexend(color: Colors.white,fontSize: 10.sp,fontWeight: FontWeight.bold )),
+                                       child: Text("Late: 10 minutes",style: GoogleFonts.lexend(color: Colors.grey.shade400,fontSize: 10.sp,fontWeight: FontWeight.bold )),
                                      ),
                                   ),
                               ],
