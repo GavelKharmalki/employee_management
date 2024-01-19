@@ -75,7 +75,7 @@ class _MainScreenState extends State<MainScreen> {
                             spreadRadius: 5, // Specify the spread radius if needed
                           ),
                         ],
-                        color: Colors.grey[100],
+                        color: Colors.white,
           
                         ),
                         child: Column(
@@ -85,10 +85,20 @@ class _MainScreenState extends State<MainScreen> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text("Overview", style: GoogleFonts.lexend(color: Colors.black,fontSize: 24.sp,fontWeight: FontWeight.normal)),    
+                                
                                 Container(
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(15.w),
                                     color: Colors.white,
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.grey.shade200,
+                                      //color: Colors.black,
+                                      blurRadius: 5,
+                                      spreadRadius: 0,
+                                      offset: Offset(0,1),
+                                      )
+                                    ]
                                   ),
                                   child: Padding(
                                     padding:  EdgeInsets.all(10.w),
@@ -97,6 +107,7 @@ class _MainScreenState extends State<MainScreen> {
                                 )
                               ],
                             ),
+                            
                             Column(
                               children: [
                                 Padding(
@@ -123,9 +134,13 @@ class _MainScreenState extends State<MainScreen> {
                                       ),
                                     ),
                                   ),
-                                  
+                                  const VerticalDivider(
+                                     color: Colors.black,
+                                      thickness: 1.0,
+                                      width: 20.0,
+                                    ),
                                   Container(
-                                    decoration: BoxDecoration(
+                                   decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(15.w),
                                       color: Colors.white,
                                     ),
@@ -143,7 +158,11 @@ class _MainScreenState extends State<MainScreen> {
                                       ),
                                     ),
                                   ),
-                                  
+                                  const VerticalDivider(
+      color: Colors.black,
+      thickness: 1.0,
+      width: 20.0,
+    ),
                                   Container(
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(15.w),
@@ -173,6 +192,16 @@ class _MainScreenState extends State<MainScreen> {
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(15.w),
                                   color: Colors.white,
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.grey.shade200,
+                                      //color: Colors.black,
+                                      blurRadius: 5,
+                                      spreadRadius: 0,
+                                      offset: Offset(0,0),
+                                    )
+                                     
+                                  ]
                               ),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -183,6 +212,7 @@ class _MainScreenState extends State<MainScreen> {
                                   ),
                                  
                             Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 // Container(
@@ -197,7 +227,7 @@ class _MainScreenState extends State<MainScreen> {
                                    child: DottedLine(
                                     direction: Axis.vertical,
                                     dashColor: Colors.black,
-                                    //lineLength: 190.h,
+                                    lineLength: 180.h,
                                    ),
                                  ),
                                  Positioned(
@@ -217,26 +247,41 @@ class _MainScreenState extends State<MainScreen> {
                                     ],
                                   ),
                                 ),
-                                ],
-                               ),
-
+                                 ],
+                                ),
+                                // Stack(
+                                //   children: [
+                                //     Padding(
+                                //    padding:  EdgeInsets.all(10.h),
+                                //    child: DottedLine(
+                                //     direction: Axis.vertical,
+                                //     dashColor: Colors.black,
+                                //     lineLength: 190.h,
+                                //    ),
+                                //  ),
+                                //   ],
+                                // ),
                                 Column(
                                   children: [
                                     Row(children: [
                                       timeBoxes("8:10 AM", "Actual check in", Icons.abc),
+                                      
                                       timeButtons("Check in", "Late: 10 minutes", Icons.login_outlined),
                                     ],),
+                                    SizedBox(height: 2.5.h,),
                                     Row(children: [
                                       timeBoxes("30:00:04", "Start 12:05 PM", Icons.abc),
                                       timeButtons("Break", "On Going..", Icons.local_cafe_rounded),
                                     ],),
+                                    SizedBox(height: 2.5.h,),
                                     Row(children: [
                                       timeBoxes("13:00 PM", "After Break", Icons.abc),
-                                      timeButtons2("After Break", "It is now 12 35 pm", Icons.battery_charging_full_sharp),
+                                      timeButtons2("After Break", "It is now 12 35 pm", Icons.battery_charging_full_sharp,true),
                                     ],),
+                                    SizedBox(height: 2.5.h,),
                                     Row(children: [
                                       timeBoxes("17:00 PM", "Check out schedule", Icons.abc),
-                                      timeButtons2("CheckOut", "It is now 12 35 pm", Icons.logout),
+                                      timeButtons2("CheckOut", "It is now 12 35 pm", Icons.logout,false),
                                     ],),
                                   ],
                                 ),

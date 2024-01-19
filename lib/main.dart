@@ -33,7 +33,7 @@ class MyApp extends StatelessWidget {
           home: child,
         );
       },
-      child: SignUpScreen()
+      child: MainScreen(userId: "ABC",token: '12234',)
     );
   }
 }

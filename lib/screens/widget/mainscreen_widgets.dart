@@ -119,7 +119,7 @@ Widget timeButtons(String buttonTitle, String buttonSubTitle,IconData buttonIcon
               );
 }
 
-Widget timeButtons2(String buttonTitle, String buttonSubTitle,IconData buttonIconData) {
+Widget timeButtons2(String buttonTitle, String buttonSubTitle,IconData buttonIconData, bool rotateIcon) {
   return Container(
     padding: EdgeInsets.all(8.w),
      width: 155.w,
@@ -141,8 +141,18 @@ Widget timeButtons2(String buttonTitle, String buttonSubTitle,IconData buttonIco
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Icon(buttonIconData,color: Colors.deepPurple,), 
+                        rotateIcon?Transform.rotate(
+  angle: 90 * (3.141592653589793 / 180), // Rotate 90 degrees (in radians) for horizontal rotation
+  child: Icon(
+    buttonIconData,
+    size: 24.0,
+    color: Colors.deepPurple,
+  ),
+):Icon(buttonIconData,color: Colors.deepPurple,), 
                         
+                       SizedBox(
+                        width: 5.w,
+                       ) ,
                         Expanded(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -187,7 +197,7 @@ Widget overTimeButton(BuildContext context) {
                                       //color: Colors.black,
                                       blurRadius: 5,
                                       spreadRadius: 0,
-                                      offset: Offset(0,0)
+                                      offset: Offset(0,0),
                                     )
         ]
       ),
