@@ -1,10 +1,12 @@
 
 import 'package:employee_management/authentication/signup.dart';
+import 'package:employee_management/providers/mainscreenprovider.dart';
 import 'package:employee_management/screens/homepage.dart';
 import 'package:employee_management/screens/mainscreen.dart';
 import 'package:employee_management/screens/scanscreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provider/provider.dart';
 
 
 
@@ -33,8 +35,13 @@ class MyApp extends StatelessWidget {
           home: child,
         );
       },
-      child: MainScreen(userId: "ABC",token: '12234',)
+      child: ChangeNotifierProvider(
+        create: (context) => MainScreenProvider(),
+        child: const MainScreen(userId: "ABC", token: "123",),
+      ),
     );
   }
 }
+
+
 

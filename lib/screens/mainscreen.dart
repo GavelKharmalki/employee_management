@@ -1,10 +1,14 @@
+import 'dart:async';
+
 import 'package:dotted_line/dotted_line.dart';
+import 'package:employee_management/providers/mainscreenprovider.dart';
 import 'package:employee_management/screens/widget/mainscreen_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 class MainScreen extends StatefulWidget {
   final String userId;
@@ -16,12 +20,37 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
-  
+  bool checkedIn = false;
+  bool startTimeButton = false;
+  String _currentTime = '';
+  DateTime? startTime;
+  DateTime? stopTime;
+  String? result;
+  bool endButtonEnabled = false;
+  bool afterBreak = false;
+  bool iconBreakButton = false;
   
   String formattedDate = DateFormat('EEEE, d MMMM yyyy', 'en_US').format(DateTime.now());
   
   @override
+  void initState() {
+    // TODO: implement initState
+    _updateTime();
+    Timer.periodic(Duration(seconds: 1), (timer) {
+      _updateTime();
+    });
+    super.initState();
+  }
+
+  void _updateTime() {
+    setState(() {
+      _currentTime = DateFormat('HH:mm:ss').format(DateTime.now());
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
+    MainScreenProvider mainScreenProvider = Provider.of<MainScreenProvider>(context, listen: false);
     return Scaffold(
       backgroundColor: Colors.black,
       extendBodyBehindAppBar: true,
@@ -143,11 +172,11 @@ class _MainScreenState extends State<MainScreen> {
                                       ),
                                     ),
                                   ),
-                                  const VerticalDivider(
-                                     color: Colors.black,
-                                      thickness: 1.0,
-                                      width: 20.0,
-                                    ),
+                                  Container(
+                                    width: 2.w,
+                                    height: 40.h,
+                                    color: Colors.grey,
+                                  ),
                                   Container(
                                    decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(15.w),
@@ -167,11 +196,11 @@ class _MainScreenState extends State<MainScreen> {
                                       ),
                                     ),
                                   ),
-                                  const VerticalDivider(
-      color: Colors.black,
-      thickness: 1.0,
-      width: 20.0,
-    ),
+                                Container(
+                                    width: 2.w,
+                                    height: 40.h,
+                                    color: Colors.grey,
+                                  ),
                                   Container(
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(15.w),
@@ -245,13 +274,15 @@ class _MainScreenState extends State<MainScreen> {
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
                                       SizedBox(height: 20.h),
-                                      Container(color: Colors.white,  child: Icon(Icons.check_circle, color: Colors.green)),
+                                      Container(color: Colors.white,  child: mainScreenProvider.checkedInButton? Icon(Icons.check_circle, color: Colors.green):Icon(Icons.circle_outlined, color: Colors.grey)),
                                       SizedBox(height: 30.h),
-                                      Container(color: Colors.white, child: Icon(Icons.pin_drop_outlined, color: Colors.deepPurple)),
+                                      
+                                      iconBreakButton?Container(color:Colors.white, child: Icon(Icons.check_circle, color: Colors.green)):Container(color: Colors.white, child:mainScreenProvider.isBreakActive?Icon(Icons.pin_drop_outlined, color: Colors.deepPurple):Icon(Icons.circle_outlined, color: Colors.grey)),
+                                      
                                       SizedBox(height: 40.h),
-                                      Container(color: Colors.white,child: Icon(Icons.circle_outlined, color: Colors.grey)),
+                                      Container(color: Colors.white,child: !iconBreakButton?Icon(Icons.circle_outlined, color: Colors.grey):Icon(Icons.check_circle, color: Colors.green)),
                                       SizedBox(height: 50.h),
-                                      Container(color:Colors.white, child: Icon(Icons.circle_outlined, color: Colors.grey)),
+                                      Container(color:Colors.white, child: mainScreenProvider.getCheckoutButton?Icon(Icons.check_circle, color: Colors.green):Icon(Icons.circle_outlined, color: Colors.grey)),
                                       Container(color: Colors.white, height: 10,width: 10,)
                                     ],
                                   ),
@@ -273,24 +304,49 @@ class _MainScreenState extends State<MainScreen> {
                                 Column(
                                   children: [
                                     Row(children: [
-                                      timeBoxes("8:10 AM", "Actual check in", Icons.abc),
+                                      mainScreenProvider.checkedInButton?
+                                      timeBoxes(mainScreenProvider.currentTime, "Checked in", Icons.abc):
+                                      timeBoxes(_currentTime, "Not at work", Icons.abc),
                                       
-                                      timeButtons("Check in", "Late: 10 minutes", Icons.login_outlined),
+                                      GestureDetector(onTap: (){
+                                        
+                                        mainScreenProvider.recordTime();
+                                        
+                                      },  child: timeButtons("Check in", "Late: 10 minutes", Icons.login_outlined)),
                                     ],),
                                     SizedBox(height: 2.5.h,),
                                     Row(children: [
-                                      timeBoxes("30:00:04", "Start 12:05 PM", Icons.abc),
-                                      timeButtons("Break", "On Going..", Icons.local_cafe_rounded),
+                                      mainScreenProvider.isBreakActive?
+                                      timeBoxes("On Break", _currentTime, Icons.abc):
+                                      timeBoxes(mainScreenProvider.getTotalBreakDuration(), "Not on break", Icons.abc),
+                                      GestureDetector(onTap: (){
+                                        setState(() {
+                                          iconBreakButton = false;
+                                        });
+                                        mainScreenProvider.startBreak();
+                                        
+                                      }, child: timeButtons("Break", "On Going..", Icons.local_cafe_rounded)),
                                     ],),
                                     SizedBox(height: 2.5.h,),
                                     Row(children: [
-                                      timeBoxes("13:00 PM", "After Break", Icons.abc),
-                                      timeButtons2("After Break", "It is now 12 35 pm", Icons.battery_charging_full_sharp,true),
+                                      !iconBreakButton?
+                                      timeBoxes("", iconBreakButton?"Not on Break":"On Break", Icons.abc):
+                                      timeBoxes(mainScreenProvider.afterBreak, "After Break", Icons.abc),
+                                      GestureDetector(onTap:(){
+                                        mainScreenProvider.endBreak();
+                                        setState(() {
+                                          iconBreakButton = true;
+                                        });
+                                      }, child: timeButtons2("After Break", "It is now 12 35 pm", Icons.battery_charging_full_sharp,true)),
                                     ],),
                                     SizedBox(height: 2.5.h,),
                                     Row(children: [
+                                      mainScreenProvider.getCheckoutButton?
+                                      timeBoxes(mainScreenProvider.checkout, "Check out schedule", Icons.abc):
                                       timeBoxes("17:00 PM", "Check out schedule", Icons.abc),
-                                      timeButtons2("CheckOut", "It is now 12 35 pm", Icons.logout,false),
+                                      GestureDetector(onTap: (){
+                                        mainScreenProvider.getCheckOut();
+                                      }, child: timeButtons2("CheckOut", "It is now 12 35 pm", Icons.logout,false)),
                                     ],),
                                   ],
                                 ),
