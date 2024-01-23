@@ -330,7 +330,7 @@ class _MainScreenState extends State<MainScreen> {
                                     SizedBox(height: 2.5.h,),
                                     Row(children: [
                                       !iconBreakButton?
-                                      timeBoxes("", iconBreakButton?"Not on Break":"On Break", Icons.abc):
+                                      timeBoxes("", mainScreenProvider.isBreakActive?"On Break":"Not on break", Icons.abc):
                                       timeBoxes(mainScreenProvider.afterBreak, "After Break", Icons.abc),
                                       GestureDetector(onTap:(){
                                         mainScreenProvider.endBreak();
