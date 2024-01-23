@@ -21,6 +21,10 @@ class MainScreenProvider extends ChangeNotifier {
   bool get checkedInButton => _checkedInButton;
   bool _onBreakFinishIcon = false;
   bool get onBreakFinishIcon => _onBreakFinishIcon;
+
+  String _getAfterBreak = _formatTime(DateTime.now());
+  String get getAfterBreak => _getAfterBreak;
+
   // Check in
   String recordTime() {
     // Get the current day
@@ -82,6 +86,12 @@ class MainScreenProvider extends ChangeNotifier {
       notifyListeners();
     }
     return _checkout;
+  }
+
+  String getAfterBreakTime() {
+    _getAfterBreak = _formatTime(DateTime.now());
+    notifyListeners();
+    return _getAfterBreak;
   }
 
   String getTotalBreakDuration() {

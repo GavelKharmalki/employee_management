@@ -317,7 +317,7 @@ class _MainScreenState extends State<MainScreen> {
                                     SizedBox(height: 2.5.h,),
                                     Row(children: [
                                       mainScreenProvider.isBreakActive?
-                                      timeBoxes("On Break", _currentTime, Icons.abc):
+                                      timeBoxes(_currentTime,"On Break" , Icons.abc):
                                       timeBoxes(mainScreenProvider.getTotalBreakDuration(), "Not on break", Icons.abc),
                                       GestureDetector(onTap: (){
                                         setState(() {
@@ -331,9 +331,10 @@ class _MainScreenState extends State<MainScreen> {
                                     Row(children: [
                                       !iconBreakButton?
                                       timeBoxes("", mainScreenProvider.isBreakActive?"On Break":"Not on break", Icons.abc):
-                                      timeBoxes(mainScreenProvider.afterBreak, "After Break", Icons.abc),
+                                      timeBoxes(mainScreenProvider.getAfterBreak, "After Break", Icons.abc),
                                       GestureDetector(onTap:(){
                                         mainScreenProvider.endBreak();
+                                        mainScreenProvider.getAfterBreakTime();
                                         setState(() {
                                           iconBreakButton = true;
                                         });
@@ -343,7 +344,7 @@ class _MainScreenState extends State<MainScreen> {
                                     Row(children: [
                                       mainScreenProvider.getCheckoutButton?
                                       timeBoxes(mainScreenProvider.checkout, "Check out schedule", Icons.abc):
-                                      timeBoxes("17:00 PM", "Check out schedule", Icons.abc),
+                                      timeBoxes("6:00 PM", "Check out schedule", Icons.abc),
                                       GestureDetector(onTap: (){
                                         mainScreenProvider.getCheckOut();
                                       }, child: timeButtons2("CheckOut", "It is now 12 35 pm", Icons.logout,false)),

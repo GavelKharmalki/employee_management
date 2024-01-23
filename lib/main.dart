@@ -35,7 +35,7 @@ class MyApp extends StatelessWidget {
             home: child,
           );
         },
-        child: const ProfileScreen(),
+        child: const MainScreen(userId: "gavel",token: '1223'),
       ),
     );
   }
